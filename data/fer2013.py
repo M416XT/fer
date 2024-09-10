@@ -43,9 +43,21 @@ def get_dataloaders(path='datasets/fer2013/fer2013.csv', bs=64, augment=True):
 
     fer2013, emotion_mapping = load_data(path)
 
-    xtrain, ytrain = prepare_data(fer2013[fer2013['Usage'] == 'Training'])
-    xval, yval = prepare_data(fer2013[fer2013['Usage'] == 'PrivateTest'])
-    xtest, ytest = prepare_data(fer2013[fer2013['Usage'] == 'PublicTest'])
+    # xtrain, ytrain = prepare_data(fer2013[fer2013['Usage'] == 'Training'])
+    # xval, yval = prepare_data(fer2013[fer2013['Usage'] == 'PrivateTest'])
+    # xtest, ytest = prepare_data(fer2013[fer2013['Usage'] == 'PublicTest'])
+    train_size = int(0.8 * len(fer2013))
+    val_size = int(0.1 * len(fer2013))
+    test_size = len(fer2013) - train_size - val_size
+
+    train_data = fer2013[:train_size]
+    val_data = fer2013[train_size:train_size + val_size]
+    test_data = fer2013[train_size + val_size:]
+
+    xtrain, ytrain = prepare_data(train_data)
+    xval, yval = prepare_data(val_data)
+    xtest, ytest = prepare_data(test_data)
+
 
     mu, st = 0, 255
 
